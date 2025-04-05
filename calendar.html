@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aesthetic Calendar</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: white;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .calendar {
+            width: 100%;
+            max-width: 320px;
+            border: 1px solid #CD5C5C;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            box-sizing: border-box;
+        }
+
+        .calendar-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-header h2 {
+            margin: 0;
+            font-size: 22px;
+            color: #CD5C5C;
+            word-wrap: break-word;
+        }
+
+        .days-of-week {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .day {
+            padding: 10px;
+            font-size: 16px;
+            color: #CD5C5C;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .current-day {
+            background-color: #CD5C5C;
+            color: white;
+            font-weight: bold;
+        }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            text-align: center;
+            grid-auto-rows: minmax(50px, auto);
+        }
+
+        .calendar-days .day-cell {
+            padding: 10px;
+            font-size: 14px;
+            background-color: transparent;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            color: #333;
+        }
+
+        .calendar-days .day-cell:hover {
+            background-color: #f2f2f2;
+            cursor: pointer;
+        }
+
+        .calendar-days .current-day-cell {
+            background-color: #CD5C5C;
+            color: white;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 320px) {
+            .calendar {
+                width: 100%;
+                padding: 15px;
+            }
+
+            .calendar-header h2 {
+                font-size: 18px;
+            }
+
+            .calendar-header p {
+                font-size: 12px;
+            }
+
+            .calendar-days .day-cell {
+                padding: 8px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="calendar">
+    <div class="calendar-header">
+        <h2 id="month-year"></h2>
+    </div>
+
+    <div class="days-of-week">
+        <div>Sun</div>
+        <div>Mon</div>
+        <div>Tue</div>
+        <div>Wed</div>
+        <div>Thu</div>
+        <div>Fri</div>
+        <div>Sat</div>
+    </div>
+
+    <div class="calendar-days" id="calendar-days"></div>
+</div>
+
+<script>
+    function updateCalendar() {
+        const now = new Date();
+
+        const currentDate = now.getDate();
+        const currentMonth = now.getMonth();
+        const currentYear = now.getFullYear();
+        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+        const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const monthYearElement = document.getElementById("month-year");
+        monthYearElement.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+
+        const calendarDaysElement = document.getElementById("calendar-days");
+        calendarDaysElement.innerHTML = ""; // Clear the previous days
+
+        for (let i = 0; i < firstDayOfMonth; i++) {
+            const emptyCell = document.createElement("div");
+            emptyCell.classList.add("day-cell");
+            calendarDaysElement.appendChild(emptyCell);
+        }
+
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dayCell = document.createElement("div");
+            dayCell.classList.add("day-cell");
+            dayCell.textContent = day;
+
+            if (day === currentDate) {
+                dayCell.classList.add("current-day-cell");
+            }
+
+            calendarDaysElement.appendChild(dayCell);
+        }
+    }
+
+    updateCalendar();
+    setInterval(updateCalendar, 1000 * 60 * 60);
+</script>
+
+</body>
+</html>
